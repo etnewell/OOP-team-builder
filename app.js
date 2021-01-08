@@ -13,6 +13,22 @@ const render = require("./lib/htmlRenderer");
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
+const initialQ = [
+    {
+        type: 'list',
+        name: 'firstQ',
+        message: 'Would you like to add a team member?',
+        choices: [
+            'yes',
+            'no'
+        ]
+}
+];
+
+
+
+
+
 const roleQ = [
     {
      type: 'list',
@@ -30,22 +46,22 @@ const roleQ = [
 const engineerQ = [
     {
      type: 'input',
-     name: 'nameQ',
+     name: 'name',
      message: "What's your name?"
     },
     {
      type:'input',
-     name: 'idQ',
+     name: 'id',
      message: "What's your ID?"
     },
     {
         type:'input',
-        name: 'emailQ',
+        name: 'email',
         message: "What's your email?"
     },
     {
         type:'input',
-        name: 'githubQ',
+        name: 'github',
         message: "What's your github account?"
     },
 
@@ -54,17 +70,17 @@ const engineerQ = [
 const employeeQ = [
     {
      type: 'input',
-     name: 'nameQ',
+     name: 'name',
      message: "What's your name?"
     },
     {
      type:'input',
-     name: 'idQ',
+     name: 'id',
      message: "What's your ID?"
     },
     {
         type:'input',
-        name: 'emailQ',
+        name: 'email',
         message: "What's your email?"
     },
 ];
@@ -72,22 +88,22 @@ const employeeQ = [
 const managerQ = [
     {
      type: 'input',
-     name: 'nameQ',
+     name: 'name',
      message: "What's your name?"
     },
     {
      type:'input',
-     name: 'idQ',
+     name: 'id',
      message: "What's your ID?"
     },
     {
         type:'input',
-        name: 'emailQ',
+        name: 'email',
         message: "What's your email?"
     },
     {
         type:'input',
-        name: 'officeQ',
+        name: 'office',
         message: "What's your office number?"
     },
 
@@ -96,31 +112,138 @@ const managerQ = [
 const internQ = [
     {
      type: 'input',
-     name: 'nameQ',
+     name: 'name',
      message: "What's your name?"
     },
     {
      type:'input',
-     name: 'idQ',
+     name: 'id',
      message: "What's your ID?"
     },
     {
         type:'input',
-        name: 'emailQ',
+        name: 'email',
         message: "What's your email?"
     },
     {
         type:'input',
-        name: 'schoolQ',
+        name: 'school',
         message: "What's your school?"
     },
 
 ];
 
 
+var employeeAry =[];
+
+const newReq = function (){
+
+inquirer.prompt(roleQ).then((response) => {
+            console.log(response);
+            responseReturn = response.roleChoice;
+
+        console.log(responseReturn);    
+
+        if (responseReturn === 'Intern'){
+            inquirer.prompt(internQ).then((answer) => {
+                var name = answer.name;
+                var id = answer.id;
+                var email = answer.email
+                var school = answer.school;
+
+                intern = new Intern(name, id, email, school);
+                employeeAry.push(intern);
+                console.log(employeeAry);
+
+            console.log(intern);
+            homePg();
+                // return intern;
+
+            })
+        }
+        else if (responseReturn === 'Engineer'){
+            inquirer.prompt(engineerQ).then((answer) => {
+                var name = answer.name;
+                var id = answer.id;
+                var email = answer.email
+                var github = answer.github;
+
+                engineer = new Engineer(name, id, email, github);
+                employeeAry.push(engineer);
+                console.log(engineer)
+                console.log(employeeAry);
+
+                homePg();
+                // return engineer;
+            });
+        }
+        else if (responseReturn === 'Manager'){
+            inquirer.prompt(managerQ).then((answer) => {
+                var name = answer.name;
+                var id = answer.id;
+                var email = answer.email
+                var officeNumber = answer.office;
+
+                manager = new Manager(name, id, email, officeNumber);
+                employeeAry.push(manager);
+                console.log(manager);
+                console.log(employeeAry);
+
+            homePg();
+                // return manager;
+            });
+        }
+        else if (responseReturn === 'Employee'){
+            inquirer.prompt(employeeQ).then((answer) => {
+                var name = answer.name;
+                var id = answer.id;
+                var email = answer.email;
 
 
+            employee = new Employee(name, id, email);
+            employeeAry.push(employee);
+            console.log(employeeAry);
+            console.log(employee);
+            homePg();
+                // return employee;
+            });
+        }
+        else {
+            console.log("Please enter a valid role")
+        };
 
+    });
+};
+
+const homePg = function () {
+inquirer.prompt(initialQ).then((response) => {
+    question1Return = response.firstQ;
+if (question1Return === 'yes'){
+    newReq();
+}
+else{
+    console.log(employeeAry);
+    var fullRender = render(employeeAry);
+    console.log(fullRender);
+
+    var string = JSON.stringify(fullRender)
+    fs.appendFile('team.html', fullRender, (err) => { 
+        if (err) { 
+          console.log(err); 
+        } 
+        // else { 
+        //   // Get the file contents after the append operation 
+        //   console.log("\nFile Contents of file after append:", 
+        //     fs.readFileSync("example_file.txt", "utf8")); 
+        // } 
+      }); 
+    // outputPath.write(fullRender);
+
+
+};
+});
+};
+homePg();
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
@@ -140,4 +263,3 @@ const internQ = [
 // and Intern classes should all extend from a class named Employee; see the directions
 // for further information. Be sure to test out each class and verify it generates an
 // object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
