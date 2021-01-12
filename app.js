@@ -146,6 +146,7 @@ inquirer.prompt(roleQ).then((response) => {
 
         if (responseReturn === 'Intern'){
             inquirer.prompt(internQ).then((answer) => {
+                console.log(answer);
                 var name = answer.name;
                 var id = answer.id;
                 var email = answer.email
@@ -163,6 +164,7 @@ inquirer.prompt(roleQ).then((response) => {
         }
         else if (responseReturn === 'Engineer'){
             inquirer.prompt(engineerQ).then((answer) => {
+                console.log(answer);
                 var name = answer.name;
                 var id = answer.id;
                 var email = answer.email
@@ -179,6 +181,7 @@ inquirer.prompt(roleQ).then((response) => {
         }
         else if (responseReturn === 'Manager'){
             inquirer.prompt(managerQ).then((answer) => {
+                console.log(answer);
                 var name = answer.name;
                 var id = answer.id;
                 var email = answer.email
@@ -226,7 +229,7 @@ else{
     var fullRender = render(employeeAry);
     console.log(fullRender);
 
-    var string = JSON.stringify(fullRender)
+    // var string = JSON.stringify(fullRender)
     fs.appendFile('team.html', fullRender, (err) => { 
         if (err) { 
           console.log(err); 
